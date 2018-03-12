@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<h1>利用ajax修改下面的文字</h1>
+<p id="cont">这是被修改的文字</p>
+<button id="xiugai">点我修改文字</button>
+<button id="xg" onclick="loadXMLDoc()">ajax直接修改内容</button>
+<button id="btn">发送</button>
+</body>
+<script>
+    // GET请求数据
+    jQuery(document).ready(function(){
+        jQuery("#xiugai").click(function(){
+            jQuery.ajax({
+                url:'/static/ajax/ajax_info.txt',
+                type:'get',
+                cache:false,
+                success:function(data){
+                    document.getElementById("cont").innerHTML=data;
+                },
+                error:function(){
+                    alert(argument[1]);
+                }
+            })
+        })
+    })
+
+    // POST提交数据
+    jQuery(document).ready(function(){
+        jQuery("#btn").click(function(){
+            jQuery.ajax(
+            {
+                url:'/hello',
+                data:{
+                    selRollBack:"selRollBack",
+                    selOperatorsCode:"selOperatorsCode",
+                    PROVINCECODE:"PROVINCECODE",
+                    pass2:"pass2"
+                },
+                type:'post',
+                cache:false,
+                dataType:'json',
+                success:function(data){
+                    if (data == 'true'){
+                        alert("修改成功！");
+                    }else{
+                        alert(data);
+                    }
+                },
+                error:function(){
+                    alert(arguments[1]);
+                }
+            })
+        })
+    })
+
+    // 未使用jQuery,使用传统的ajax传递数据
+    function loadXMLDoc(){
+        var xmlhttp;
+        if (window.XMLHttpRequest){
+            xmlhttp = new XMLHttpRequest();
+        }
+
+        xmlhttp.onreadystatechange=function(){
+            if (xmlhttp.readyState==4 && xmlhttp.status==200){
+                document.getElementById("cont").innerHTML
+                =xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","/static/ajax/ajax_info.txt",true);
+        xmlhttp.send();
+    }
+
+</script>
+</html>
